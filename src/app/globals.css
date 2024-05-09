@@ -6,28 +6,79 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+
+  --component-bg: rgb(0,0,0);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  min-height: 100vh;
+  min-width: 100vw;
+  color: white;
+  /* background: url(/bgs/bg-lines-2.png) right bottom no-repeat, 
+    url(/bgs/bg-dotted.png) right top no-repeat, 
+    url(/bgs/bg-big-shapes.png) left bottom no-repeat, 
+    url(/bgs/bg-lines.png) left top no-repeat, */
+    /* url(/bgs/bg-wavy-2.png) center top no-repeat,
+    url(/bgs/bg-lines.png) center bottom no-repeat ,  */
+    /* url(/bgs/bg-wavy.png) center no-repeat,  */
+    /* #0d0d0df7; */
+
+  background: url(/bg2/bg-lines-2.png) right bottom no-repeat, 
+    url(/bg2/bg-dotted.png) right top no-repeat, 
+    url(/bg2/bg-big-shapes.png) left bottom no-repeat, 
+    url(/bg2/bg-lines.png) left top no-repeat,
+    /* url(/bgs/bg-wavy-2.png) center top no-repeat,
+    url(/bgs/bg-lines.png) center bottom no-repeat ,  */
+    /* url(/bgs/bg-wavy.png) center no-repeat,  */
+    #0d0d0df7;
+  
+  background: url(/bg3/bg-lines-2.png) right bottom no-repeat, 
+      url(/bg3/bg-dotted.png) right top no-repeat, 
+      url(/bg3/bg-big-shapes.png) left bottom no-repeat, 
+      url(/bg3/bg-lines.png) left top no-repeat,
+      /* url(/bgs/bg-wavy-2.png) center top no-repeat,
+      url(/bgs/bg-lines.png) center bottom no-repeat ,  */
+      /* url(/bgs/bg-wavy.png) center no-repeat,  */
+      #0d0d0df7;
+
+
+  /* #000000e8 */
+  color: white;
+}
+
+@layer components {
+  .form-container{
+    @apply flex justify-center flex-col bg-black rounded-lg p-8;
+    background-color: var(--component-bg);
+
+  }
+  .form-options{
+    @apply mt-3 flex justify-center gap-1 text-sm;
+  }
+  
+  .input{
+    @apply my-2 p-2 text-white rounded-sm border-white border-2 relative w-full;
+    background-color: var(--component-bg);
+  }
+  .submit-btn{
+    @apply mt-8 mb-2 bg-white border-black p-2 text-black rounded-sm
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.form-options a:hover{
+  text-decoration: underline;
+}
+.password-button{
+  height: 20px;
+  width: 20px;
+  fill: white;
+  right: 12px;
+  top: 20px;
 }
