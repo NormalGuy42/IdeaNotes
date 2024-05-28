@@ -1,21 +1,24 @@
+'use client';
+
+import LoginForm from "@/components/LoginForm";
 import PasswordInput from "@/components/inputs/passwordInput";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Login(){
+    const session = useSession()
+    const router = useRouter()
+    
+    useEffect(() => {
+        if (session?.status === 'authenticated') {
+            let username = session?.data.user.username;
+            router.push('/' + username) 
+        }
+    })
+    
     return(
-        <main className="flex justify-center items-center min-h-screen">
-            <form className="box form-container">
-                <label htmlFor="email">Email</label>
-                <input type="text" className="input" name="email"/>
-                <label htmlFor="password">Password</label>
-                <PasswordInput/>
-                <button className="submit-btn">Login</button>
-                <div className="form-options">
-                    <Link href="signup">Create Account</Link>
-                    <span>|</span>
-                    <Link href="forgot-password">Forgot Password</Link>
-                </div>
-            </form>
-        </main>
+        <LoginForm />
     )
 }

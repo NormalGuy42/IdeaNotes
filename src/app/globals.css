@@ -11,9 +11,45 @@
 }
 
 
+@layer components {
+  .nav{
+    @apply sticky bottom-10 right-10 ml-auto w-max;
+  }
+  .form-container{
+    @apply flex justify-center flex-col bg-black rounded-lg p-8;
+    background-color: var(--component-bg);
+
+  }
+  .form-options{
+    @apply mt-3 flex justify-center gap-1 text-sm;
+  }
+  .input{
+    @apply my-2 p-2 text-white rounded-sm border-white border-2 relative w-full;
+    background-color: var(--component-bg);
+  }
+  .submit-btn{
+    @apply mt-8 mb-2 bg-white border-black p-2 text-black rounded-sm
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.hello{
+  background-color: blue;
+}
+
 body {
   min-height: 100vh;
-  min-width: 100vw;
+  color: white;
+  background-color: black;
+}
+
+.main-bg{
+  min-height: 100vh;
   color: white;
   /* background: url(/bgs/bg-lines-2.png) right bottom no-repeat, 
     url(/bgs/bg-dotted.png) right top no-repeat, 
@@ -41,36 +77,31 @@ body {
       url(/bgs/bg-lines.png) center bottom no-repeat ,  */
       /* url(/bgs/bg-wavy.png) center no-repeat,  */
       #0d0d0df7;
-
-
-  /* #000000e8 */
+      /* #181818f7 */
   color: white;
 }
-
-@layer components {
-  .form-container{
-    @apply flex justify-center flex-col bg-black rounded-lg p-8;
-    background-color: var(--component-bg);
-
-  }
-  .form-options{
-    @apply mt-3 flex justify-center gap-1 text-sm;
-  }
-  
-  .input{
-    @apply my-2 p-2 text-white rounded-sm border-white border-2 relative w-full;
-    background-color: var(--component-bg);
-  }
-  .submit-btn{
-    @apply mt-8 mb-2 bg-white border-black p-2 text-black rounded-sm
-  }
+/*Nav stuff start*/
+.nav-icon{
+  fill: white;
+  height: 30px;
+  width: 30px;
 }
+/*Nav stuff end*/
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/*Card components start*/
+.card-bg{
+  background-color: black
 }
+.card-img{
+  height: 180px;
+  width: 180px;
+  display: block;
+}
+.card-text{
+  font-size: 20px;
+  text-align: center;
+}
+/*Card components end*/
 
 .form-options a:hover{
   text-decoration: underline;

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { AuthProvider } from "./providers/authprovider";
+import "../globals.css";
+import { AuthProvider } from "../providers/authprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,15 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" href="/favicons/favicon-32x32.png" sizes="any" />
-      </head>
-      <body className={inter.className}>
-        <AuthProvider>
+      <div className='main-bg'>
           {children}
-        </AuthProvider>
-      </body>
-    </html>
+      </div>
   );
 }

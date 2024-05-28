@@ -1,21 +1,23 @@
-import PasswordInput from "@/components/inputs/passwordInput";
-import Link from "next/link";
 
-export default function SignUp(){
-    return(
-        <main className="flex justify-center items-center min-h-screen">
-            <form className="box form-container">
-                <label htmlFor="username">Username</label>
-                <input type="text" className="input" id="username"/>
-                <label htmlFor="email">Email</label>
-                <input type="text" className="input" id="email"/>
-                <label htmlFor="password">Password</label>
-                <PasswordInput/>
-                <button className="submit-btn">Create Account</button>
-                <div className="form-options">
-                    <Link href="login">Login</Link>
-                </div>
-            </form>
-        </main>
-    )
+"use client";
+
+import RegisterForm from "@/components/RegisterForm";
+import { useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default async function SignUp(){
+    
+    const session = useSession()
+    const router = useRouter()
+    
+    useEffect(() => {
+        if (session?.status === 'authenticated') {
+            let username = session?.data.user.username;
+            router.push('/' + username) 
+        }
+    })
+    
+    
+    return <RegisterForm/>
 }
