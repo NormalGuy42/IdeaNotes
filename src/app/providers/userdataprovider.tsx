@@ -27,6 +27,7 @@ const UserDataProvider = ({ children } : {children: React.ReactNode}) => {
     const session = useSession()
     const [userType, setUserType] = useState<String>('blocked');
     const [data, setData] = useState<UserData>(emptyUserData);
+    const [error, setError] = useState(false);
 
     const getData = async ()=> {
         try{
@@ -48,6 +49,8 @@ const UserDataProvider = ({ children } : {children: React.ReactNode}) => {
             }
         }catch(error){
             console.log(error)
+            console.log('huh')
+            setError(true)
             setData(emptyUserData)
         }
     }
@@ -58,12 +61,13 @@ const UserDataProvider = ({ children } : {children: React.ReactNode}) => {
         getData();
     },[])
 
+
     if(userType === 'blocked' && status === 'NOT-LOGGED-IN'){
         return (
             <UserDataContext.Provider value={data}>
                 <div>
                     {children}
-                    <PrivateUserNavBar username={username}/>
+                    {error && <PrivateUserNavBar username={username}/>}
                 </div>
             </UserDataContext.Provider>
       )

@@ -1,12 +1,15 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { FormEvent, useState } from "react"
+import { usePathname, useRouter } from "next/navigation";
+import React, { FormEvent, useEffect, useState } from "react"
 
 const UserNotExist = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState('')
+    const [username,setUsername] = useState('')
+
     const router = useRouter();
+    const path = usePathname();
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
@@ -14,10 +17,8 @@ const UserNotExist = () => {
         setError('')
         setIsLoading(true)
 
-        const formData = new FormData(e.currentTarget)
-        const username = formData.get('username');
 
-        if(username == null){
+        if(!username){
             setIsLoading(false)
             setError('Username field empty')
             return
@@ -26,16 +27,28 @@ const UserNotExist = () => {
         router.replace('auth/signup?username='+username)        
     }
 
+    useEffect(()=>{
+        const pageID  = path.split('/')[1];
+        setUsername(pageID)
+    },[])
+
   return (
     <div className="card-bg p-5 w-96 flex flex-col items-center">
-        <p>😯</p>
+        <p className="text-6xl pb-5">😯</p>
         <p>This user does not exist yet</p>
-        <form className="form-container" onSubmit={handleSubmit}>
+        <form className="flex items-center p-8" onSubmit={handleSubmit}>
             {error && <p className="text-red">{error}</p>}
-            <input type="text" name="username" placeholder="Enter your username" className="input" autoComplete="off"/>
-            <button type="submit" className="submit-btn">Claim this page </button>
+            <input type="text" 
+                name="username" 
+                placeholder="Enter your username" 
+                className="flexed-input" 
+                autoComplete="off"
+                value={username}
+                onChange={(e)=>setUsername(e.target.value)}
+            />
+            <button type="submit" className="flexed-submit-btn">Claim</button>
         </form>
-        <Link href='/'>HomePage</Link>
+        <Link href='/' >Home</Link>
     </div>
   )
 };

@@ -8,9 +8,6 @@ import { UserDataContext } from "../providers/userdataprovider";
 import UserNotExist from "@/components/cards/UserNotExist";
 
 
-interface UserDataInterface{
-    data: UserData
-}
 
 export default function UserPage(){
     const data: UserData = useContext(UserDataContext);

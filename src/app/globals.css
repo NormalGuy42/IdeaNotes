@@ -27,8 +27,15 @@
     @apply my-2 p-2 text-white rounded-sm border-white border-2 relative w-full;
     background-color: var(--component-bg);
   }
+  .flexed-input{
+    @apply p-2 text-white border-white border-2 relative w-full;
+    background-color: var(--component-bg);
+  }
   .submit-btn{
     @apply mt-8 mb-2 bg-white border-black p-2 text-black rounded-sm
+  }
+  .flexed-submit-btn{
+    @apply bg-white p-2 text-black border-2 border-white
   }
 }
 

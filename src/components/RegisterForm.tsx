@@ -2,8 +2,8 @@
 
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function RegisterForm(){
     const [username, setUsername] = useState("");
@@ -12,6 +12,16 @@ export default function RegisterForm(){
     const [error, setError] = useState("");
   
     const router = useRouter();
+    const searchParams = useSearchParams()
+    const usernameQuery = searchParams.get('username') 
+
+    useEffect(()=>{
+      console.log(usernameQuery)
+      if(usernameQuery !== null){
+        setUsername(usernameQuery!)
+      }
+    },[])
+
     const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     
@@ -44,7 +54,7 @@ export default function RegisterForm(){
             },
             body: JSON.stringify({
               username,
-              email,
+              email, 
               password,
             }),
           });
@@ -78,6 +88,7 @@ export default function RegisterForm(){
                     className="input" 
                     id="username" 
                     autoComplete="off"
+                    value={username}
                     name="username"/>
                 {/* {state?.errors?.username && <p>{state.errors.username}</p>} */}
 

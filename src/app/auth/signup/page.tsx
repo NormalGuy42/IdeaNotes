@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default async function SignUp(){
+export default function SignUp(){
     
     const session = useSession()
     const router = useRouter()
