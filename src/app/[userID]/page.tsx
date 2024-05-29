@@ -5,6 +5,7 @@ import EmptyUser from "@/components/cards/EmptyUser";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { UserDataContext } from "../providers/userdataprovider";
+import UserNotExist from "@/components/cards/UserNotExist";
 
 
 interface UserDataInterface{
@@ -27,6 +28,6 @@ export default function UserPage(){
         )
     }
     return(
-        <div>{}</div>
+        <UserNotExist/>
     )
 } 
