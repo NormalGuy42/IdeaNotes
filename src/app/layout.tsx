@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { AuthProvider } from "./providers/authprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +19,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicons/favicon-32x32.png" sizes="any" />
       </head>
       <body className={inter.className}>
-        <AuthProvider>
           {children}
-        </AuthProvider>
       </body>
     </html>
   );
