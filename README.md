@@ -4,8 +4,8 @@ A NextJS app where you can collect all your ideas, whether it is ideas about pro
 
 # TO DO
 
--[x] Create Database /
--[] Add authentication /
+-[x] Create Database \
+-[] Add authentication \
 -[] Add Icons List \
 -[] Add Category Page \
 -[] Add Create Idea option \
