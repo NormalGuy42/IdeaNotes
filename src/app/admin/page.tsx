@@ -1,4 +1,4 @@
-export default function UserPage(){
+export default function AdminPage(){
     return(
         <div>Admin</div>
     )
