@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 
 export type Idea = {
     id: string,
@@ -17,16 +17,37 @@ export type IdeaCardData = {
     icons: [defaultIconsList]
 }
 
+
+
+export interface UserWithCategories {
+    _id: Types.ObjectId,
+    categories: Category[],
+}
+
 export interface IdeaWithCategory {
-    id: ObjectId;
-    title: string;
-    text: string;
+    id: ObjectId,
+    title: string,
+    text: string,
     category: {
-        id: string;
-        title: string;
-        image: string;
+        id: string,
+        title: string,
+        image: string,
     }
 }
+
+export interface IdeaPageProps {
+    id: ObjectId,
+    title: string,
+    text: string,
+    status: string,
+    notes: string,
+    category: {
+        id: string,
+        title: string,
+        image: string,
+    }
+}
+
 
 
 export type CategoryIdea = {
@@ -35,9 +56,9 @@ export type CategoryIdea = {
 }
 
 export interface Category {
-    id: string;
-    name: string;
-    icon: string;
+    id: string,
+    name: string,
+    icon: string,
 }
 
 export type defaultIconsList = {

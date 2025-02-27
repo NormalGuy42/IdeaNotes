@@ -9,8 +9,11 @@
 
   --main-grey: rgb(69, 69, 69);
   /* --violet: #9208f6; */
-  --violet: #7e08f6;
-  --darker-violet: #6700b3f0;
+  /* --violet: #7e08f6; */
+  /* --violet: #7508f6; */
+  --violet: #6b3cff;
+  --darker-violet: #522fc3;
+  /* --darker-violet: #6700b3f0; */
   --grey-text: #888;
   --component-bg: rgb(0,0,0);
 
@@ -60,8 +63,26 @@ body {
   color: red;
 }
 
+h1.headline{
+  text-wrap: balance;
+  text-align: center;
+  font-weight: bold;
+  max-width: 800px;
+  line-height: 1.4;
+}
+
 h1.headline span{
   color: var(--violet);
+}
+
+.waitlist button,input{
+  height: 42px;
+}
+.waitlist input{
+  padding: 8px;
+}
+.waitlist input:focus{
+  outline: none
 }
 /*Nav stuff start*/
 .nav-icon{
@@ -104,7 +125,7 @@ h1.headline span{
   cursor: pointer;
 }
 
-.card-main .badge{
+.badge{
   padding: 4px;
   background-color: var(--main-grey);
   width: fit-content;

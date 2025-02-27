@@ -8,6 +8,37 @@ import { revalidatePath } from "next/cache";
 import { AuthError } from "next-auth";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { Category } from "@/types";
+import Waitlist from "../models/Waitlist";
+
+
+export async function subscribe(
+  prevStaet: unknown,
+  formData: FormData,
+){
+
+  try{
+    const email = formData.get('email')
+
+    const emailFound = await Waitlist.findOne({
+      email: email
+    })
+
+    if(emailFound) return {success: false, message: 'You have already joined'}
+
+    const subscriber = new Waitlist({
+      email: email
+    })
+  
+    await subscriber.save()
+
+    return {success: true, message: "🎉 Successfully Joined!"}
+
+  }catch(error){
+    console.log(error)
+    return {success: false, message: `Important Error`}
+  }
+  
+}
 
 
 export async function signup(
@@ -135,7 +166,7 @@ export async function getUserCategories(){
     await connectToMongoDB();
 
     const user = await User.findOne({ 
-      id: session.user.id 
+      _id: session.user.id 
     }).select('categories');
 
     if (!user) {

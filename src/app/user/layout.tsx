@@ -9,10 +9,13 @@ export default async function UserPageLayout(
   children: React.ReactNode;
 }>) {
 
+  
+
   const session = await auth()
   if (!session){
     redirect('/sign-in')
   }
+  
   
   return(
       <main>

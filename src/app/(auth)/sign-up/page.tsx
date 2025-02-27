@@ -19,6 +19,7 @@ export default async function SignUp({
   }
 }){
 
+
   const session = await auth()
   if (session) {
     return redirect(callbackUrl || '/user')

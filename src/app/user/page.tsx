@@ -12,6 +12,12 @@ export default async function UserPage(){
     //     )   
     // }
 
+    console.log(ideas)
+
+    // return(
+    //     <div></div>
+    // )
+
     return(
         <div>
             <div className="flex justify-center items center gap-2">
@@ -31,8 +37,8 @@ export default async function UserPage(){
             <div className="grid grid-cols-4 px-4 py-12 gap-4">
                 {ideas!.map((item)=>
                     <IdeaCard 
-                        // key={item.id}
-                        id={''}
+                        key={item.id.toString()}
+                        id={item.id.toString()}
                         title={item.title}
                         category={item.category}
                         type={item.status}

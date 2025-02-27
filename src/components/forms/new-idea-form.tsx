@@ -22,13 +22,13 @@ function CreateIdeaButton(){
 }
 
 
-export default function NewIdeaForm(props: {icons: Array<defaultIconsList>}){
+export default function NewIdeaForm(props: {icons: Array<defaultIconsList>, categories: Category[]}){
     
     const [error, setError] = useState<string>();
     const router = useRouter();
     const { toast } = useToast()
 
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<Category[]>(props.categories);
     const [selectedCategory, setSelectedCategory] = useState<string>("");
 
     //New Category stuff

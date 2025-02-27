@@ -8,7 +8,7 @@ import IconsList from "../models/Iconslist";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { Types } from "mongoose";
-import { IdeaWithCategory } from "@/types";
+import { IdeaPageProps, IdeaWithCategory, UserWithCategories } from "@/types";
 
 // GET ICONS
 
@@ -165,17 +165,6 @@ export async function getAllIdeas(){
 }
 
 
-interface Category {
-    id: string;
-    name: string;
-    icon: string;
-}
-
-interface UserWithCategories {
-    _id: Types.ObjectId;
-    categories: Category[];
-}
-
 
 export async function getIdeasWithCategories() {
     try {
@@ -215,10 +204,11 @@ export async function getIdeasWithCategories() {
 
         // Transform ideas
         const mergedIdeas = ideas.map(idea => ({
-            id: idea._id,
+            id: idea._id as String,
             title: idea.ideaName,
             text: idea.ideaDescription,
             status: idea.status,
+            notes: idea.ideaNotes,
             category: categoryMap.get(idea.ideaCategory) || {
                 id: idea.ideaCategory,
                 title: 'Uncategorized',
@@ -237,5 +227,67 @@ export async function getIdeasWithCategories() {
             success: false,
             message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
         };
+    }
+}
+
+export async function getIdeaByID(ideaID: String){
+    
+    const session = await auth();
+    if (!session) {
+        return { success: false, message: 'Not authenticated' };
+    }
+
+    await connectToMongoDB();
+
+    try{
+
+        const userID = session.user.id;
+
+        const user = await User.findOne({
+            _id: userID
+        })
+        .select("categories")
+        .lean<UserWithCategories>()
+
+        if(!user) return {success: false, message: 'User not found'}
+
+        const categoryMap = new Map(
+            (user.categories || []).map(cat => [cat.id, {
+                id: cat.id,
+                title: cat.name,
+                image: cat.icon
+            }])
+        );
+
+        const idea = await Idea.findOne({
+            _id: ideaID
+        })
+
+        if(!idea) return {success: false, message: 'Idea does not exist'}
+
+        const mergedIdea: IdeaPageProps = {
+            id: idea._id,
+            title: idea.ideaName,
+            text: idea.ideaDescription,
+            notes: idea.ideaNotes,
+            status: idea.status,
+            category: categoryMap.get(idea.ideaCategory) || {
+                id: idea.ideaCategory,
+                title: 'Uncategorized',
+                image: '/default-category-icon.png'
+            }
+        };
+
+
+        return{
+            success: true,
+            data: mergedIdea,
+        }
+
+    }catch(error){
+        return {
+            success: false,
+            message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
+        };       
     }
 }
