@@ -44,9 +44,9 @@ export default function WaitlistPage(){
    
     return(
         <main className="min-h-screen">
-            <div className="h-[80vh] flex items-center justify-center flex-col">
-                <h1 className="text-5xl headline"><span>Never forget an idea</span> ever again starting from now</h1>
-                <p className="p-3 text-center">Document, Categorize and keep track of your ideas, all in one place.</p>
+            <div className="h-screen flex items-center justify-center flex-col">
+                <h1 className="text-5xl headline max-sm:text-4xl"><span>Never forget an idea</span> ever again starting from now</h1>
+                <p className="p-3 text-center max-sm:max-w-[400px]">Document, Categorize and keep track of your ideas, all in one place.</p>
 
                 <form action={handleSubmit} className="waitlist flex items-center py-10 ">
                 <input type="text" name="email" placeholder="Please enter your email" className="m-0 rounded-none" />
@@ -63,7 +63,7 @@ export default function WaitlistPage(){
                         
                         :
 
-                    "Join Us Now!"
+                    "Join Us!"
                     }
                 </button>
                 </form>
@@ -75,7 +75,7 @@ export default function WaitlistPage(){
                     <img src="/icons/twitter-x-logo.png" alt="" height={100} width={100}/>
                 </a>
                 </div>
-            </div>`
+            </div>
         </main>
     )
 }
