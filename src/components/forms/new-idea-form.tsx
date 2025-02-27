@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Plus } from "lucide-react";
+import { Icon, Plus } from "lucide-react";
 import { cn, getIconPathByName } from "@/lib/utils";
 import { createIdea, getAllIcons } from "@/lib/actions/ideas.actions";
 import { useFormState, useFormStatus } from "react-dom";
@@ -259,11 +259,11 @@ export default function NewIdeaForm(props: {icons: Array<defaultIconsList>, cate
                     {showIconList && (
                         <div className="mt-2 p-4 h-60 overflow-y-scroll glass-input flex flex-col gap-4 animate-in fade-in-50">
                         {props.icons!.map((iconGroup) => (
-                           <div>
+                           <div key={iconGroup.iconCategoryName}>
                                 <h3>{iconGroup.iconCategoryName}</h3>
                                 <div className="grid icons-grid justify-around">
                                     {iconGroup.icons.map((icon) => (
-                                        <div className="flex flex-col items-center" onClick={()=> selectIcon(icon.iconName)}>
+                                        <div className="flex flex-col items-center" onClick={()=> selectIcon(icon.iconName)} key={icon.iconName}>
                                             <img src={icon.iconImg} alt=""  className="h-8 w-8"/>
                                             <div className="text-sm">{icon.iconName}</div>
                                         </div>
