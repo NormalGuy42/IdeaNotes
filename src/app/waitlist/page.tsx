@@ -70,10 +70,11 @@ export default function WaitlistPage(){
    
     return(
         <main className="min-h-screen">
-            <div className="h-screen flex items-center justify-center flex-col">
+            <div className="flex items-center justify-center flex-col max-w-[1000px] mx-auto pt-20">
                 <h1 className="text-5xl headline max-sm:text-4xl"><span>Never forget an idea</span> ever again starting from now</h1>
                 <p className="p-3 text-center max-sm:max-w-[400px]">Document, Categorize and keep track of your ideas, all in one place.</p>
-
+                
+                <div className="relative pb-[59.4059405940594%] h-0 w-5/6 max-[800px]: mx-auto"><iframe src="https://www.loom.com/embed/44171d5a9fd848088c9860012dfe3ed0?sid=6d2d3cde-808e-45f6-a933-ded880c1075d" allowFullScreen className="absolute top-0 left-0 w-full h-full"></iframe></div>
                 <form ref={formRef} onSubmit={handleSubmit} className="waitlist flex items-center py-10 ">
                     <input 
                         type="email" 
