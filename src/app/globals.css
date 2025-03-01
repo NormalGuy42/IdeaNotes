@@ -32,7 +32,7 @@
     @apply border-white p-2 text-white rounded block w-full;
     background-color: var(--violet);
   }
-  .main-btn:hover{
+  .main-btn:hover,.main-btn-pending{
     background-color: var(--darker-violet);
   }
 

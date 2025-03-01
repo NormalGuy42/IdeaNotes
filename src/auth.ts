@@ -49,7 +49,7 @@ export const {  handlers, auth, signIn, signOut  } = NextAuth({
 
         await connectToMongoDB()
         const user = await User.findOne({
-          email: email
+          email: { $regex: email, $options: 'i' }
         }).select("+password");
 
         if(!user) throw new Error("User does not exist");

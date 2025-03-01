@@ -12,18 +12,17 @@ import Waitlist from "../models/Waitlist";
 
 
 export async function subscribe(
-  prevStaet: unknown,
-  formData: FormData,
+  emailData: String,
 ){
 
   try{
-    const email = formData.get('email')
+    const email = emailData
 
-    const emailFound = await Waitlist.findOne({
-      email: email
-    })
+    await connectToMongoDB();
 
-    if(emailFound) return {success: false, message: 'You have already joined'}
+    const emailFound = await Waitlist.findOne({ email: { $regex: email, $options: 'i' } })
+
+    if(emailFound) return { success: false, message: 'You have already joined' }
 
     const subscriber = new Waitlist({
       email: email
@@ -31,11 +30,13 @@ export async function subscribe(
   
     await subscriber.save()
 
+    console.log(`User ${email} joined`)
+
     return {success: true, message: "🎉 Successfully Joined!"}
 
   }catch(error){
     console.log(error)
-    return {success: false, message: `Important Error`}
+    return {success: false, message: `Important Error. Contact Website Owner`}
   }
   
 }
@@ -51,7 +52,7 @@ export async function signup(
   try {
 
     await connectToMongoDB();
-    const userFound = await User.findOne({ email });
+    const userFound = await User.findOne({ email: { $regex: email, $options: 'i' } });
 
     if(userFound) return { success: false, message: 'Email already in use' }
     
@@ -89,7 +90,7 @@ export async function signUpWithGoogle(
 
     try {
       await connectToMongoDB();
-      const userFound = await User.findOne({ email });
+      const userFound = await User.findOne({ email: { $regex: email, $options: 'i' } });
 
       if(userFound) return { success: false, message: 'Email already in use' }
   

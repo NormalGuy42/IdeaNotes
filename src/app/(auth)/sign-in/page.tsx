@@ -25,7 +25,7 @@ export default async function SignIn({
   }  
   
   return (
-    <div className="gird grid-cols-1 justify-items-center content-center h-full">
+    <div className="grid grid-cols-1 justify-items-center content-center h-full">
       <SignInForm />
     </div>
   );

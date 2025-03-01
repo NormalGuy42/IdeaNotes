@@ -34,9 +34,9 @@ export default function RootLayout({
       <Provider>
         <body className={inter.className}>
           {children}
+          <Toaster />
         </body>
       </Provider>
-      <Toaster />
     </html>
   );
 }
