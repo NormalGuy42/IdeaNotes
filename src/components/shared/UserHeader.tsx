@@ -29,8 +29,8 @@ const UserHeader = () => {
                 </div>
                 <ul className="flex justify-end pt-5 pr-5 gap-2">
                     {   
-                        links.map((link)=>
-                            <NavBarItem url={link.url} currentUrl={pathname} text={link.text} />
+                        links.map((link,index)=>
+                            <NavBarItem key={index} url={link.url} currentUrl={pathname} text={link.text} />
                         )
 
                     }
