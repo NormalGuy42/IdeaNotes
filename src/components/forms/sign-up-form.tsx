@@ -6,6 +6,7 @@ import Image from "next/image";
 import GoogleSignIn from "../buttons/google-btn";
 import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
+import { CustomLoadingIcon } from "../mainIcons/Icons";
 
 const SignUpButton = () => {
     const { pending } = useFormStatus()
@@ -13,7 +14,7 @@ const SignUpButton = () => {
     return (
     <div className="submit-btn-container py-4">
         <button className="main-btn">
-        {pending ? 'Submitting...' : 'Create Account'}
+        {pending ? <CustomLoadingIcon/> : 'Create Account'}
         </button>
     </div>
     )

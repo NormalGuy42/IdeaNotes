@@ -12,7 +12,7 @@ import { IdeaPageProps, IdeaWithCategory, UserWithCategories } from "@/types";
 
 // GET ICONS
 
-export const getAllIcons = async() =>{
+export async function getAllIcons(){
     const session = await auth();
     if(!session) throw new Error('User is not authenticated')
 
@@ -136,11 +136,12 @@ export async function createIdea(
 // GET IDEAS
 
 export async function getAllIdeas(){
+    const session = await auth();
+    if (!session) {
+        return { success: false, message: 'Not authenticated' };
+    }
+
     try {
-        const session = await auth();
-        if (!session) {
-            return { success: false, message: 'Not authenticated' };
-        }
 
         await connectToMongoDB();
 

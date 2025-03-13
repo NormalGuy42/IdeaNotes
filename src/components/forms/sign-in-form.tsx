@@ -7,6 +7,7 @@ import Image from "next/image";
 import GoogleSignIn from "../buttons/google-btn";
 import { signInWithCredentials } from "@/lib/actions/user.actions";
 import { useState } from "react";
+import { CustomLoadingIcon } from "../mainIcons/Icons";
 
 
 const SignInButton = () => {
@@ -15,7 +16,7 @@ const SignInButton = () => {
     return (
     <div className="submit-btn-container py-4">
         <button className="main-btn">
-        {pending ? 'Submitting...' : 'Sign In'}
+        {pending ? <CustomLoadingIcon/> : 'Sign In'}
         </button>
     </div>
     )

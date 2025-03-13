@@ -1,9 +1,25 @@
 'use client';
 import Link from "next/link";
 import Image from "next/image";
- 
+import { usePathname } from "next/navigation";
+import { NavBarItem } from "./Header";
+
+
 const UserHeader = () => {
-   return (
+
+    const pathname = usePathname()
+    const links = [
+        {
+            url: '/user',
+            text: 'Home'
+        },
+        {
+            url: '/user/profile',
+            text: 'Profile'
+        },
+    ]
+
+    return (
         <nav className="flex justify-between items-center p-3">
             <div className="flex gap-3">
                 <div className="logo">
@@ -12,16 +28,12 @@ const UserHeader = () => {
                     </Link>
                 </div>
                 <ul className="flex justify-end pt-5 pr-5 gap-2">
-                    <li className="hover:underline">
-                        <Link href="/user">
-                            Home
-                        </Link>
-                    </li>
-                    <li className="hover:underline">
-                        <Link href="/user/profile">
-                            Profile
-                        </Link>
-                    </li>
+                    {   
+                        links.map((link)=>
+                            <NavBarItem url={link.url} currentUrl={pathname} text={link.text} />
+                        )
+
+                    }
                 </ul>
             </div>
             <Link href="/user/new-idea">

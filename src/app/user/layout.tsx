@@ -12,8 +12,13 @@ export default async function UserPageLayout(
   
 
   const session = await auth()
+  
   if (!session){
     redirect('/sign-in')
+  }
+
+  if(!session.user.emailVerified){
+    redirect('/verify-email')
   }
   
   

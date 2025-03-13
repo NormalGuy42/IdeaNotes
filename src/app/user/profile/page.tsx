@@ -1,11 +1,8 @@
-// "use client"
 
 import { auth, signOut } from "../../../auth";
 import { logout } from "@/lib/actions/user.actions";
-// import { useRouter } from "next/navigation";
 
 export default async function Profile(){
-    // const router = useRouter();
     const session = await auth()
     if (!session) return <div>Not authenticated</div> 
 

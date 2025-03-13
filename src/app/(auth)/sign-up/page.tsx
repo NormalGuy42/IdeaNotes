@@ -22,7 +22,7 @@ export default async function SignUp({
 
   const session = await auth()
   if (session) {
-    return redirect(callbackUrl || '/user')
+    return redirect(callbackUrl || '/verify-email')
   }  
   return (
     <div className="grid grid-cols-1 justify-items-center content-center h-full">

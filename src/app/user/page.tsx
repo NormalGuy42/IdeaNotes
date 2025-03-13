@@ -2,8 +2,10 @@ import IdeaCard from "@/components/cards/IdeaCard"
 import { getAllIcons, getIdeasWithCategories } from "@/lib/actions/ideas.actions";
 
 export default async function UserPage(){
+    
     const icons = await getAllIcons()
     const result = await getIdeasWithCategories();
+
     const ideas = result.data;
     
     // if(!result.success){
@@ -12,7 +14,7 @@ export default async function UserPage(){
     //     )   
     // }
 
-    console.log(ideas)
+    // console.log(ideas)
 
     // return(
     //     <div></div>
@@ -34,7 +36,7 @@ export default async function UserPage(){
                     </svg>
                 </button>
             </div>
-            <div className="grid grid-cols-4 px-4 py-12 gap-4">
+            <div className="grid grid-cols-[repeat(auto-fit,240px)] px-4 py-12 gap-4">
                 {ideas!.map((item)=>
                     <IdeaCard 
                         key={item.id.toString()}

@@ -17,6 +17,7 @@ declare module 'next-auth' {
   
   interface Session {
     user: {
+      emailVerified: boolean;
       id: string
       email: string
       role: string
@@ -66,7 +67,7 @@ export const {  handlers, auth, signIn, signOut  } = NextAuth({
     })
   ],
   callbacks: {
-    jwt: async ({ token, user, account}) => {
+    jwt: async ({ token, user, account, trigger, session}) => {
       if(user){
         await connectToMongoDB()
         let existingUser = await User.findOne({
@@ -85,14 +86,22 @@ export const {  handlers, auth, signIn, signOut  } = NextAuth({
 
         if(existingUser) {
           token.role = existingUser.role;
+          token.emailVerified = existingUser.emailVerified;
         }
+      }
+      if (trigger === "update") {
+        token.emailVerified = session.user.emailVerified;
       }
       return token;
     },
-    session: async ({ session, token }: any) => {
+    session: async ({ session, user, token, trigger }: any) => {
       session.user.id = token.sub
       session.user.role = token.role
-      
+      session.user.emailVerified = token.emailVerified
+      if (trigger === 'update') {
+        session.user.emailVerified = token.emailVerified
+      }
+
       return session
     },
     authorized({ auth, request, token } : any){

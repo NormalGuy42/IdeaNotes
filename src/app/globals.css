@@ -20,6 +20,24 @@
   --input-border: 1px solid rgba(140, 140, 140, 0.5);
 }
 
+@theme {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+
+  --main-grey: rgb(69, 69, 69);
+  /* --violet: #9208f6; */
+  /* --violet: #7e08f6; */
+  /* --violet: #7508f6; */
+  --violet: #6b3cff;
+  --darker-violet: #522fc3;
+  /* --darker-violet: #6700b3f0; */
+  --grey-text: #888;
+  --component-bg: rgb(0,0,0);
+
+  --input-border: 1px solid rgba(140, 140, 140, 0.5);
+}
+
 
 @layer components {
   .nav{
@@ -29,7 +47,7 @@
     @apply w-1/2 max-w-md min-w-72;
   }
   .main-btn{
-    @apply border-white p-2 text-white rounded block w-full;
+    @apply border-white p-2 text-white rounded w-full flex justify-center;
     background-color: var(--violet);
   }
   .main-btn:hover,.main-btn-pending{

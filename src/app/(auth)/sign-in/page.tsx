@@ -21,7 +21,7 @@ export default async function SignIn({
 
   const session = await auth()
   if (session) {
-    return redirect(callbackUrl || '/user')
+    return redirect(callbackUrl || '/verify-email')
   }  
   
   return (
