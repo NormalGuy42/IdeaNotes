@@ -6,7 +6,7 @@ import Image from "next/image";
 import GoogleSignIn from "../buttons/google-btn";
 import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
-import { CustomLoadingIcon } from "../mainIcons/Icons";
+import { CustomLoadingIcon } from "../main-icons/Icons";
 
 const SignUpButton = () => {
     const { pending } = useFormStatus()

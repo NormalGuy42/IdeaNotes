@@ -3,7 +3,7 @@
 import { toast } from "@/hooks/use-toast";
 import { redirect, useSearchParams } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import { CustomLoadingIcon } from "../../components/mainIcons/Icons";
+import { CustomLoadingIcon } from "../../components/main-icons/Icons";
 import { subscribe } from "@/lib/actions/user.actions";
 import Header from "../../components/shared/Header";
 

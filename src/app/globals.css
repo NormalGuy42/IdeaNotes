@@ -3,28 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground: rgb(0, 0, 0);
 
   --main-grey: rgb(69, 69, 69);
-  /* --violet: #9208f6; */
-  /* --violet: #7e08f6; */
-  /* --violet: #7508f6; */
+  /* --violet: #633cff; */
   --violet: #6b3cff;
   --darker-violet: #522fc3;
   /* --darker-violet: #6700b3f0; */
   --grey-text: #888;
   --component-bg: rgb(0,0,0);
+  --grey-overlay: #62616199;
+
 
   --input-border: 1px solid rgba(140, 140, 140, 0.5);
 }
 
 @theme {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-
+  --foreground: rgb(0, 0, 0);
   --main-grey: rgb(69, 69, 69);
   /* --violet: #9208f6; */
   /* --violet: #7e08f6; */
@@ -33,7 +28,8 @@
   --darker-violet: #522fc3;
   /* --darker-violet: #6700b3f0; */
   --grey-text: #888;
-  --component-bg: rgb(0,0,0);
+  --component-bg: rgb(0, 0 ,0);
+  --color-grey-overlay: #62616199;
 
   --input-border: 1px solid rgba(140, 140, 140, 0.5);
 }
@@ -52,6 +48,10 @@
   }
   .main-btn:hover,.main-btn-pending{
     background-color: var(--darker-violet);
+  }
+
+  .ideapage-circular-btn{
+    @apply main-btn rounded-full w-12 h-12 fixed bottom-32 p-3 right-4;
   }
 
 }
@@ -75,6 +75,10 @@ body {
   min-height: 100vh;
   color: white;
   background-color: black;
+}
+
+.overlay{
+  background-color: var(--grey-overlay);
 }
 
 .text-destructive{
@@ -102,6 +106,7 @@ h1.headline span{
 .waitlist input:focus{
   outline: none
 }
+
 /*Nav stuff start*/
 .nav-icon{
   fill: white;
@@ -122,7 +127,11 @@ h1.headline span{
   width: 100%;
   max-width: unset;
   border: none;
+  outline: none;
 }
+/* .search-container input:focus{
+  outline: none;
+} */
 .search-icon{
   position: absolute;
   right: 4px;
@@ -141,6 +150,7 @@ h1.headline span{
   box-shadow: 0px 2px 2px 0px rgb(47 47 47 / 75%) inset;
   border: 1px solid #ffffff4f;
   cursor: pointer;
+  background-color: var(--foreground);
 }
 
 .badge{

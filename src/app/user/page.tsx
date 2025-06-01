@@ -1,10 +1,22 @@
 import IdeaCard from "@/components/cards/IdeaCard"
+import NewIdeaForm from "@/components/forms/new-idea-form";
 import { getAllIcons, getIdeasWithCategories } from "@/lib/actions/ideas.actions";
+import { getUserCategories } from "@/lib/actions/user.actions";
+import { Category } from "@/types";
 
 export default async function UserPage(){
     
     const icons = await getAllIcons()
     const result = await getIdeasWithCategories();
+    // const icons = await getAllIcons() as unknown as Array<defaultIconsList>;
+    const categories = await getUserCategories()
+    const data = categories.data as [Category]
+    
+    if(!categories.success){
+        return(
+            <div>{categories.message}</div>
+        )
+    }
 
     const ideas = result.data;
     

@@ -1,6 +1,6 @@
 
 import WaitlistForm from "@/app/waitlist/waitlist-page";
-import { CustomLoadingIcon } from "@/components/mainIcons/Icons";
+import { CustomLoadingIcon } from "@/components/main-icons/Icons";
 import Header from "@/components/shared/Header";
 import { toast } from "@/hooks/use-toast";
 import { subscribe } from "@/lib/actions/user.actions";

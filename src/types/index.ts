@@ -48,7 +48,10 @@ export interface IdeaPageProps {
     }
 }
 
-
+export interface IdeaPageComponentProps {
+    idea: IdeaPageProps,
+    icons: defaultIconsList[]
+}
 
 export type CategoryIdea = {
     title: String,

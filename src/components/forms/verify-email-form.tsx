@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { toast } from "@/hooks/use-toast";
 import { verifyEmail } from "@/lib/actions/user.actions";
-import { CustomLoadingIcon } from "../mainIcons/Icons";
+import { CustomLoadingIcon } from "../main-icons/Icons";
 import { revalidatePath } from "next/cache";
 
 export default function VerifyEmailForm(){

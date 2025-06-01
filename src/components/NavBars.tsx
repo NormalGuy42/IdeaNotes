@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { AddIcon, BackIcon, HomeIcon, LibraryIcon, UserIcon } from "./mainIcons/Icons";
+import { AddIcon, BackIcon, HomeIcon, LibraryIcon, UserIcon } from "./main-icons/Icons";
 import Link from "next/link";
 
 const NavIcon = (props:{link:String , icon: React.ReactElement})=>{

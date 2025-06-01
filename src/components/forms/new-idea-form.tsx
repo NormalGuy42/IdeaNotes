@@ -1,8 +1,8 @@
 "use client"
 
-import { signup } from "@/lib/actions/user.actions";
+import { getUserCategories, signup } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { LegacyRef, useEffect, useState, useTransition } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Icon, Plus } from "lucide-react";
@@ -22,13 +22,23 @@ function CreateIdeaButton(){
 }
 
 
-export default function NewIdeaForm(props: {icons: Array<defaultIconsList>, categories: Category[]}){
+export default function NewIdeaForm(props: {formRef:LegacyRef<HTMLFormElement>}){
     
     const [error, setError] = useState<string>();
     const router = useRouter();
     const { toast } = useToast()
 
-    const [categories, setCategories] = useState<Category[]>(props.categories);
+    const savedCategories = localStorage.getItem('userCategories')
+    const savedIcons = localStorage.getItem('defaultIcons')
+
+    const [categories, setCategories] = useState<Category[]>(()=>{
+        return savedCategories ? JSON.parse(savedCategories) : []
+    });
+    const [icons,setIcons] = useState<defaultIconsList[]>(()=>{
+        return savedIcons ? JSON.parse(savedIcons) : []
+    })
+
+    // const [categories, setCategories] = useState<Category[]>([])
     const [selectedCategory, setSelectedCategory] = useState<string>("");
 
     //New Category stuff
@@ -124,27 +134,58 @@ export default function NewIdeaForm(props: {icons: Array<defaultIconsList>, cate
         
     }
 
-     
+    useEffect(()=>{
+        const fetchData = async()=>{
+            try{
+
+                const icons = await getAllIcons()
+                const categories = await getUserCategories()
+                // const data = categories.data as [Category]
+                
+                if(!categories.success){
+                    return(
+                        <div>{categories.message}</div>
+                    )
+                }
+
+
+                setCategories(categories.data!)
+                setIcons(icons)
+
+                if(!savedIcons || !savedCategories){
+                    localStorage.setItem('userCategories',JSON.stringify(categories.data))
+                    localStorage.setItem('defaultIcons',JSON.stringify(icons))
+                }
+
+            }catch(error){
+                console.log(error)
+            }
+        }
+
+        fetchData()
+
+    },[])
+
+    console.log('start')
     return(
-        <section className="w-full flex items-center justify-center">
             <form 
                 action={handleSubmit}
-                className="card-main credentials-form py-3"
+                className="card-main credentials-form py-3 relative z-20"
+                ref={props.formRef}
             >
+
                 {data && !data.success && (
                     <div className="text-center text-destructive">{data.message}</div>
                 )}
-                <label className="w-full">Idea Name</label>
                 <input
                     type="text"
                     placeholder="Idea Name"
-                    className="w-full border border-solid py-1 px-2.5 rounded"
+                    className="w-full border border-none outline-none py-1 px-2.5 rounded"
                     name="name"
                 />
                 {errors.ideaName && (
                     <div className="text-destructive">{errors.ideaName}</div>
                 )}
-                <label className="w-full">Category</label>
                 <div className="flex w-full">
                 <input type="hidden" name="newCategory" value={isNewCategory? 'true' : 'false'} />
                 <input type="hidden" name="categoryIcon" value={categories.find(c => c.id === selectedCategory)?.icon!}/>
@@ -159,7 +200,7 @@ export default function NewIdeaForm(props: {icons: Array<defaultIconsList>, cate
                             {selectedCategory && selectedCategory != 'add' ? (
                                 <div className="flex items-center gap-2">
                                     <img 
-                                        src={getIconPathByName(categories.find(c => c.id === selectedCategory)?.icon!,props.icons)} 
+                                        src={getIconPathByName(categories.find(c => c.id === selectedCategory)?.icon!,icons)} 
                                         alt="" 
                                         className="w-4 h-4"
                                     />
@@ -188,7 +229,7 @@ export default function NewIdeaForm(props: {icons: Array<defaultIconsList>, cate
                             >
                                 <div className="flex items-center gap-2 py-1">
                                     <img 
-                                        src={getIconPathByName(category.icon,props.icons)} 
+                                        src={getIconPathByName(category.icon,icons)} 
                                         alt="" 
                                         className="w-4 h-4"
                                     />
@@ -258,7 +299,7 @@ export default function NewIdeaForm(props: {icons: Array<defaultIconsList>, cate
                     
                     {showIconList && (
                         <div className="mt-2 p-4 h-60 overflow-y-scroll glass-input flex flex-col gap-4 animate-in fade-in-50">
-                        {props.icons!.map((iconGroup) => (
+                        {icons!.map((iconGroup) => (
                            <div key={iconGroup.iconCategoryName}>
                                 <h3>{iconGroup.iconCategoryName}</h3>
                                 <div className="grid icons-grid justify-around">
@@ -276,27 +317,24 @@ export default function NewIdeaForm(props: {icons: Array<defaultIconsList>, cate
                     </div>
                 </div>
                 )}
-                <label className="w-full">Quick Description</label>
                 <div className="flex w-full">
                     <textarea
-                    placeholder="Enter a quick description of your idea"
-                    className="w-full border border-solid py-1 px-2.5 rounded"
+                    placeholder="Quick description of your idea"
+                    className="w-full border-none outline-none py-1 px-2.5 rounded"
                     name="description"
                     ></textarea>
                 </div>
                 {errors.quickDescription && (
                     <div className="text-destructive">{errors.quickDescription}</div>
                 )}
-                <label className="w-full">Notes</label>
                 <div className="flex w-full">
                     <textarea
-                    placeholder="Enter a quick description of your idea"
-                    className="w-full border border-solid py-1 px-2.5 rounded"
+                    placeholder="Notes"
+                    className="w-full border-none outline-none py-1 px-2.5 rounded"
                     name="notes"
                     ></textarea>
                 </div>
                 <CreateIdeaButton/>               
             </form>
-        </section>           
     )
 }

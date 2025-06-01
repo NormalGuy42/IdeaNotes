@@ -24,8 +24,8 @@ export default async function UserPageLayout(
   
   return(
       <main>
-          <UserHeader />
-          {children}
+        <UserHeader />
+        {children}
       </main>
   )
 }

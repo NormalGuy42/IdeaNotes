@@ -7,7 +7,7 @@ import Image from "next/image";
 import GoogleSignIn from "../buttons/google-btn";
 import { signInWithCredentials } from "@/lib/actions/user.actions";
 import { useState } from "react";
-import { CustomLoadingIcon } from "../mainIcons/Icons";
+import { CustomLoadingIcon } from "../main-icons/Icons";
 
 
 const SignInButton = () => {
