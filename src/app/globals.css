@@ -7,8 +7,8 @@
 
   --main-grey: rgb(69, 69, 69);
   /* --violet: #633cff; */
-  --violet: #6b3cff;
-  --darker-violet: #522fc3;
+  --violet: #3c5fff;
+  --darker-violet: #344ec5;
   /* --darker-violet: #6700b3f0; */
   --grey-text: #888;
   --component-bg: rgb(0,0,0);
@@ -21,10 +21,7 @@
 @theme {
   --foreground: rgb(0, 0, 0);
   --main-grey: rgb(69, 69, 69);
-  /* --violet: #9208f6; */
-  /* --violet: #7e08f6; */
-  /* --violet: #7508f6; */
-  --violet: #6b3cff;
+ 
   --darker-violet: #522fc3;
   /* --darker-violet: #6700b3f0; */
   --grey-text: #888;
@@ -49,17 +46,40 @@
   .main-btn:hover,.main-btn-pending{
     background-color: var(--darker-violet);
   }
-
+  .subheading{
+    @apply text-4xl mb-5 font-bold max-sm:text-2xl;
+  }
+  .footer-header{
+    @apply text-2xl mb-5 font-bold max-sm:text-xl;
+  }
+  .landing-section{
+    @apply max-w-[1000px] mx-auto pt-24;
+  }
   .ideapage-circular-btn{
     @apply main-btn rounded-full w-12 h-12 fixed bottom-32 p-3 right-4;
   }
 
+  
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.bg-status-green{
+  background-color: rgb(6, 184, 6);
+}
+.bg-status-yellow{
+  background-color: rgb(241, 245, 6);
+
+}
+.bg-status-red{
+  background-color: rgb(229, 4, 4);
+}
+.bg-status-blue{
+  background-color: rgb(3, 11, 248);
 }
 
 
@@ -96,7 +116,30 @@ h1.headline{
 h1.headline span{
   color: var(--violet);
 }
-
+.subheading span{
+  color: var(--violet);
+}
+.join-discord-link{
+  display: block;
+  height: 42px;
+  width: 200px;
+  margin: 20px auto;
+}
+.join-discord{
+  background-color: var(--violet);
+  padding: 8px;
+  border-radius: 8px;
+  height: 42px;
+  width: 200px;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.join-discord img{
+  height: 32px;
+  width: 32px;
+}
 .waitlist button,input{
   height: 42px;
 }
@@ -106,7 +149,51 @@ h1.headline span{
 .waitlist input:focus{
   outline: none
 }
+.landing-card{
+  width: 240px;
+  height: 240px;
+  border: 1px solid grey;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.landing-card .number{
+  background-color: var(--violet);
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  height: 42px;
+  width: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.landing-test-container-inner{
+  max-width: 380px;
+}
+
+.faq-card{
+  max-width: 800px;
+  border-top: 1px solid rgb(68, 68, 68);
+  border-bottom: 1px solid rgb(68, 68, 68);
+  margin: 0 auto;
+  padding: 12px;
+}
+
+footer ul{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+footer ul a:hover{
+  color: var(--violet);
+  text-decoration: underline;
+}
 /*Nav stuff start*/
 .nav-icon{
   fill: white;
@@ -163,6 +250,22 @@ h1.headline span{
 .card-main h3{
   padding: 12px 0;
 }
+
+.card-main button{
+  border: none;
+}
+
+.card-main span{
+  color: #b0b7b9;
+  font-size: 15px;
+}
+
+.card-main input::placeholder{
+  color: #b0b7b9;
+}
+.card-main textarea::placeholder{
+  color: #b0b7b9;
+}
 /*Card components end*/
 
 label{
@@ -186,7 +289,9 @@ textarea{
 .select{
   display: flex;
 }
-
+.edit-card-select{
+  margin-bottom: 0px;
+}
 .select option:hover{
   background-color: black;
 }

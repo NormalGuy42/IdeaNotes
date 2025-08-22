@@ -29,6 +29,7 @@ export default async function IdeaPage({ params }: { params: { id: string } }){
 
     const idea = JSON.parse(JSON.stringify(result.data));
     const categoriesResult = categories.data
+    
     return(
         <IdeaPageComponent idea={idea!} icons={icons} categories={categoriesResult!}/>
     )

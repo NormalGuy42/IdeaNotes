@@ -2,10 +2,13 @@
 
 import { cn, getIconPathByName } from "@/lib/utils"
 import { Category, IdeaPageComponentProps } from "@/types"
-import { PenIcon, SaveIcon } from "./main-icons/Icons"
+import { CustomLoadingIcon, PenIcon, SaveIcon } from "./main-icons/Icons"
 import { useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
 import { Plus } from "lucide-react"
+import { useFormState, useFormStatus } from "react-dom"
+import { updateIdea } from "@/lib/actions/ideas.actions"
+import { useToast } from "@/hooks/use-toast"
 
 
 
@@ -13,7 +16,13 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
 
     const [editMode, setEditMode] = useState(false)
     const [title,setTitle] = useState(idea.title)
+    const { toast } = useToast()
+    
 
+    const [data,action] = useFormState(updateIdea,{
+        message: '',
+        success: false,
+    })
     const [selectedCategory, setSelectedCategory] = useState<string>(idea.category.id);
     const [userCategories, setUserCategories] = useState<Category[]>(categories)
     //New Category stuff
@@ -22,9 +31,13 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
     const [showIconList, setShowIconList] = useState(false);
     const [isNewCategory,setIsNewCategory] = useState(false);
 
+    const [errors,setErrors] = useState({
+        ideaName: '',
+        ideaDescription: '',
+    })
+
     // This is to change the values
     const handleAddCategory = (value: string) => {
-        console.log('add')
         setSelectedCategory(value);
         if (value === "add") {
           setShowNewCategory(true);
@@ -35,6 +48,7 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
     
     const handleCategorySubmit = () => {
         const newCategoryID = String(userCategories.length + 1);
+        console.log(newCategoryID)
         if (newCategory.name && newCategory.icon) {
           setUserCategories([
             ...userCategories,
@@ -58,9 +72,65 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
         setShowIconList(false);
     };
 
+    const validateForm = (formData: FormData) => {
+        let isValid = true;
+        const newErrors = {
+            ideaName: '',
+            ideaDescription: ''
+        };
+
+        // Get form values
+        const ideaName = formData.get('name') as string;
+        const ideaDescription = formData.get('description') as string;
+
+        // Email validation
+        if (!ideaName || !ideaDescription) {
+            newErrors.ideaName = !ideaName? 'Idea Name is required' : '';
+            newErrors.ideaDescription = !ideaDescription? 'Description is required' : '';
+            isValid = false;
+        } 
+
+        setErrors(newErrors);
+        return isValid;
+    }
+
+    const handleSubmit = (formData: FormData) => {
+        const category = formData.get('category') as string;
+        console.log(category)
+        if (validateForm(formData)) {
+            action(formData)
+            if (!data.success) {
+                toast({
+                    variant: 'destructive',
+                    description: data.message,
+                })
+                console.log(data)
+                
+            } else {
+                console.log(data)
+            }
+        }
+        setEditMode(false)
+    }
+
+    function SaveIdea(){
+        const { pending } = useFormStatus()
+        return(
+            <button className="ideapage-circular-btn">        
+                {pending? <CustomLoadingIcon/> : <SaveIcon/>}
+            </button>
+        )
+    }
+
+
     return(
         <div className="p-4 max-w-[1200px] mx-auto relative">
-            <h1 className="text-6xl font-bold text-center">
+            <form action={handleSubmit}>
+                {
+                    editMode &&
+                    <input type="hidden" name="ideaID" value={`${idea.id}`} />
+                }
+                <h1 className="text-6xl font-bold text-center">
                 {
                     !editMode &&
                     idea.title
@@ -69,6 +139,7 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
                     editMode &&
                     <input 
                         type="text" 
+                        name="name"
                         defaultValue={idea.title}
                         className="w-full border my-0 border-none outline-none py-0 px-2.5 h-14 text-center rounded"
                     />
@@ -83,69 +154,74 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
             }
             {
                 editMode &&
-                <Select
-                    value={selectedCategory}
-                    onValueChange={handleAddCategory}
-                    name="category"
-                >
-                    <SelectTrigger className={cn("max-w-44 border border-solid border-black py-1 px-2.5 rounded select")}>
-                        <SelectValue placeholder="Choose a category">
-                            {selectedCategory && selectedCategory != 'add' ? (
-                                <div className="flex items-center gap-2">
-                                    <img 
-                                        src={getIconPathByName(userCategories.find(c => c.id === selectedCategory)?.icon!,icons)} 
-                                        alt="" 
-                                        className="w-4 h-4"
-                                    />
-                                    <span>{userCategories.find(c => c.id === selectedCategory)?.name}</span>
-                                </div>
-                                ):(
-                                <div className="flex items-center gap-2">
-                                    <img 
-                                        src={'/icons/add.svg'} 
-                                        alt="" 
-                                        className="w-4 h-4"
-                                    />
-                                    <span>Add</span>
-                                </div>
-                                )}
-                        </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent
-                        className="bg-black"
+                <div>
+                    <input type="hidden" name="newCategory" value={isNewCategory? 'true' : 'false'} />
+                    <input type="hidden" name="categoryIcon" value={userCategories.find(c => c.id === selectedCategory)?.icon!}/>
+                    <input type="hidden" name="categoryName" value={userCategories.find(c => c.id === selectedCategory)?.name} />
+                    <Select
+                        defaultValue={selectedCategory}
+                        onValueChange={handleAddCategory}
+                        name="category"
                     >
-                        {userCategories.map((category) => (
+                        <SelectTrigger className={cn("max-w-44 border border-solid border-black py-1 px-2.5 rounded select")}>
+                            <SelectValue placeholder="Choose a category">
+                                {selectedCategory && selectedCategory != 'add' ? (
+                                    <div className="flex items-center gap-2">
+                                        <img 
+                                            src={getIconPathByName(userCategories.find(c => c.id === selectedCategory)?.icon!,icons)} 
+                                            alt="" 
+                                            className="w-4 h-4"
+                                        />
+                                        <span>{userCategories.find(c => c.id === selectedCategory)?.name}</span>
+                                    </div>
+                                    ):(
+                                    <div className="flex items-center gap-2">
+                                        <img 
+                                            src={'/icons/add.svg'} 
+                                            alt="" 
+                                            className="w-4 h-4"
+                                        />
+                                        <span>Add</span>
+                                    </div>
+                                    )}
+                            </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent
+                            className="bg-black"
+                        >
+                            {userCategories.map((category) => (
+                                <SelectItem 
+                                    key={category.id} 
+                                    value={category.id}
+                                    className={cn("cursor-pointer hover:bg-slate-800 bg-black text-white")}
+                                >
+                                    <div className="flex items-center gap-2 py-1">
+                                        <img 
+                                            src={getIconPathByName(category.icon,icons)} 
+                                            alt="" 
+                                            className="w-4 h-4"
+                                        />
+                                        <span>{category.name}</span>
+                                    </div>
+                                </SelectItem>
+                            ))}
                             <SelectItem 
-                                key={category.id} 
-                                value={category.id}
-                                className={cn("cursor-pointer hover:bg-slate-800 bg-black text-white")}
-                            >
-                                <div className="flex items-center gap-2 py-1">
-                                    <img 
-                                        src={getIconPathByName(category.icon,icons)} 
-                                        alt="" 
-                                        className="w-4 h-4"
-                                    />
-                                    <span>{category.name}</span>
-                                </div>
+                                    key={"add"} 
+                                    value={"add"}
+                                    className={cn("cursor-pointer hover:bg-slate-800 bg-black text-white")}
+                                >
+                                    <div className="flex items-center gap-2 py-1">
+                                        <img 
+                                            src={"/icons/add.svg"} 
+                                            alt="" 
+                                            className="w-4 h-4"
+                                        />
+                                        <span>Add</span>
+                                    </div>
                             </SelectItem>
-                        ))}
-                        <SelectItem 
-                                key={"add"} 
-                                value={"add"}
-                                className={cn("cursor-pointer hover:bg-slate-800 bg-black text-white")}
-                            >
-                                <div className="flex items-center gap-2 py-1">
-                                    <img 
-                                        src={"/icons/add.svg"} 
-                                        alt="" 
-                                        className="w-4 h-4"
-                                    />
-                                    <span>Add</span>
-                                </div>
-                        </SelectItem>
-                    </SelectContent>
-                </Select>
+                        </SelectContent>
+                    </Select>
+                </div>
             }
             {showNewCategory && (
                 <div className=" card-main absolute w-44 space-y-4 animate-in fade-in slide-in-from-top-4 mb-5">
@@ -218,6 +294,7 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
                     editMode &&
                     <input 
                         type="text" 
+                        name="description"
                         defaultValue={idea.text}
                         className="w-full border my-0 mx-0 border-none outline-none max-h-6 min-h-6 py-0 px-0 rounded"
                     />
@@ -232,7 +309,7 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
                 {
                     editMode &&
                     <textarea 
-                        name="" 
+                        name="notes" 
                         id=""
                         defaultValue={idea.notes}
                         className="w-full border-none outline-none py-0 px-0 mx-0 rounded"
@@ -241,16 +318,15 @@ export default function IdeaPageComponent({idea,icons,categories}:IdeaPageCompon
             </p>
             {
                 !editMode && 
-                <button className="ideapage-circular-btn" onClick={()=>setEditMode(true)}>
+                <button className="ideapage-circular-btn" onClick={()=>setEditMode(true)} type="button">
                     <PenIcon/>
                 </button>
             }
             {
                 editMode &&
-                <button className="ideapage-circular-btn" onClick={()=>setEditMode(false)}>
-                    <SaveIcon/>
-                </button>
+               <SaveIdea/>
             }
+            </form>
         </div>
     )
 }

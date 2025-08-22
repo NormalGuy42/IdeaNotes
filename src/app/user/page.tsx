@@ -1,8 +1,9 @@
 import IdeaCard from "@/components/cards/IdeaCard"
 import NewIdeaForm from "@/components/forms/new-idea-form";
+import IdeaCardList from "@/components/IdeaCardList";
 import { getAllIcons, getIdeasWithCategories } from "@/lib/actions/ideas.actions";
 import { getUserCategories } from "@/lib/actions/user.actions";
-import { Category } from "@/types";
+import { Category, IdeaPageProps } from "@/types";
 
 export default async function UserPage(){
     
@@ -18,13 +19,14 @@ export default async function UserPage(){
         )
     }
 
-    const ideas = result.data;
+    let ideas = result.data! as unknown as [IdeaPageProps];
+    ideas = JSON.parse(JSON.stringify(result.data))
     
-    // if(!result.success){
-    //     return(
-    //         <div>{result.message}</div>
-    //     )   
-    // }
+    if(!result.success){
+        return(
+            <div>{result.message}</div>
+        )   
+    }
 
     // console.log(ideas)
 
@@ -48,19 +50,7 @@ export default async function UserPage(){
                     </svg>
                 </button>
             </div>
-            <div className="grid grid-cols-[repeat(auto-fit,240px)] px-4 py-12 gap-4">
-                {ideas!.map((item)=>
-                    <IdeaCard 
-                        key={item.id.toString()}
-                        id={item.id.toString()}
-                        title={item.title}
-                        category={item.category}
-                        type={item.status}
-                        text={item.text}
-                        icons={icons}
-                    />
-                )}
-            </div>
+            <IdeaCardList ideas={ideas!} icons={icons} />
         </div>
     )
 }

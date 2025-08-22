@@ -10,10 +10,10 @@ export type Idea = {
 
 export type IdeaCardData = {
     id: string,
-    title: String,
+    title: string,
     category: CategoryIdea,
-    type: String,
-    text: String,
+    type: string,
+    text: string,
     icons: [defaultIconsList]
 }
 
@@ -50,6 +50,7 @@ export interface IdeaPageProps {
 
 export interface IdeaPageComponentProps {
     idea: IdeaPageProps,
+    categories: Category[],
     icons: defaultIconsList[]
 }
 

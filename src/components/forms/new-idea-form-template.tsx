@@ -1,63 +1,28 @@
 "use client"
 
-import { getUserCategories, signup } from "@/lib/actions/user.actions";
-import { useRouter } from "next/navigation";
-import { LegacyRef, useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { Icon, Plus } from "lucide-react";
 import { cn, getIconPathByName } from "@/lib/utils";
-import { createIdea, getAllIcons } from "@/lib/actions/ideas.actions";
-import { useFormState, useFormStatus } from "react-dom";
 import { Category, defaultIconsList } from "@/types";
+import { Plus } from "lucide-react";
+import { CreateIdeaButton } from "./new-idea-form";
 
-
-export function CreateIdeaButton(){
-    const { pending } = useFormStatus()
-    return(
-        <button className="main-btn">
-            {pending? "Submitting..."   :   "Create Idea "}
-        </button>
-    )
-}
-
-
-export default function NewIdeaForm(props: {formRef:LegacyRef<HTMLFormElement>}){
-    
-    const [error, setError] = useState<string>();
-    const router = useRouter();
-    const { toast } = useToast()
-
-    const savedCategories = localStorage.getItem('userCategories')
-    const savedIcons = localStorage.getItem('defaultIcons')
-
-    const [categories, setCategories] = useState<Category[]>(()=>{
-        return savedCategories ? JSON.parse(savedCategories) : []
-    });
-    const [icons,setIcons] = useState<defaultIconsList[]>(()=>{
-        return savedIcons ? JSON.parse(savedIcons) : []
-    })
-
-    // const [categories, setCategories] = useState<Category[]>([])
+function NewIdeaFormTemplate() {
     const [selectedCategory, setSelectedCategory] = useState<string>("");
-
+    
     //New Category stuff
     const [showNewCategory,setShowNewCategory] = useState<Boolean>(false);
     const [newCategory, setNewCategory] = useState({ name: "", icon: "" });
     const [showIconList, setShowIconList] = useState(false);
     const [isNewCategory,setIsNewCategory] = useState(false);
 
-    const [data, action] = useFormState(createIdea, {
-        message: '',
-        success: false,
-    })
-
-    const [errors, setErrors] = useState({
-        ideaName: '',
-        quickDescription: ''
-    })
-
-
+    const [categories, setCategories] = useState<Category[]>([]);
+    
+    
+    const [icons,setIcons] = useState<defaultIconsList[]>(
+       [{"iconCategoryName":"Technology","icons":[{"iconName":"Computer","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914225/programming_vj3qil.png"},{"iconName":"Smartphone","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914289/smartphone_relmp7.png"},{"iconName":"CPU","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914272/cpu_mmv9qm.png"},{"iconName":"AI","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914267/brain_ins17y.png"},{"iconName":"Robot","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914284/robot_xdorth.png"},{"iconName":"Tools","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914290/tools_bynaov.png"},{"iconName":"Controller","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914271/console_g5p8e8.png"},{"iconName":"Lightbulb","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914272/cpu_mmv9qm.png"},{"iconName":"Rocket","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914286/shuttle_unspyn.png"}]},{"iconCategoryName":"Art","icons":[{"iconName":"Pallete","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914279/palette_twl9tv.png"},{"iconName":"Books","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914266/books_hfsopk.png"},{"iconName":"Script","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914285/script_yqwdwp.png"},{"iconName":"Guitar","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914275/guitar_lko1jx.png"}]},{"iconCategoryName":"Food","icons":[{"iconName":"Pizza","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914281/pizza_phrbga.png"},{"iconName":"Recipe","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914282/recipe_qkcene.png"}]},{"iconCategoryName":"Miscellaneous","icons":[{"iconName":"Dollar","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914273/dollar-bill_g6qciq.png"},{"iconName":"Lightning","iconImg":"https://res.cloudinary.com/dawhxun8o/image/upload/v1719914289/thunder_czqaos.png"}]}]
+    )    
+        
     // This is to change the values
     const handleAddCategory = (value: string) => {
         setSelectedCategory(value);
@@ -93,98 +58,18 @@ export default function NewIdeaForm(props: {formRef:LegacyRef<HTMLFormElement>})
         setShowIconList(false);
     };
 
-    const validateForm = (formData: FormData) => {
-        let isValid = true;
-        const newErrors = {
-            ideaName: '',
-            quickDescription: ''
-        };
-
-        // Get form values
-        const ideaName = formData.get('name') as string;
-        const quickDescription = formData.get('description') as string;
-
-        // Email validation
-        if (!ideaName || !quickDescription) {
-            newErrors.ideaName = !ideaName? 'Idea Name is required' : '';
-            newErrors.quickDescription = !quickDescription? 'Description is required' : '';
-            isValid = false;
-        } 
-
-        setErrors(newErrors);
-        return isValid;
-    }
-
-    const handleSubmit = (formData: FormData) => {
-        if (validateForm(formData)) {
-            action(formData)
-            if (!data.success) {
-                toast({
-                    variant: 'destructive',
-                    description: data.message,
-                })
-                
-            } else {
-                toast({
-                    description: data.message,
-                })
-                router.push(`/user`)
-            }
-        }
-        
-    }
-
-    useEffect(()=>{
-        const fetchData = async()=>{
-            try{
-
-                const icons = await getAllIcons()
-                const categories = await getUserCategories()
-                // const data = categories.data as [Category]
-                
-                if(!categories.success){
-                    return(
-                        <div>{categories.message}</div>
-                    )
-                }
-
-
-                setCategories(categories.data!)
-                setIcons(icons)
-
-                if(!savedIcons || !savedCategories){
-                    localStorage.setItem('userCategories',JSON.stringify(categories.data))
-                    localStorage.setItem('defaultIcons',JSON.stringify(icons))
-                }
-
-            }catch(error){
-                console.log(error)
-            }
-        }
-
-        fetchData()
-
-    },[])
-
-    return(
-            <form 
-                action={handleSubmit}
+    return (  
+         <form 
+                action={()=>{}}
                 className="card-main credentials-form py-3 relative z-20"
-                ref={props.formRef}
             >
 
-                {data && !data.success && (
-                    <div className="text-center text-destructive">{data.message}</div>
-                )}
                 <input
                     type="text"
                     placeholder="Idea Name"
                     className="w-full border border-none outline-none py-1 px-2.5 rounded"
                     name="name"
                 />
-                {errors.ideaName && (
-                    <div className="text-destructive">{errors.ideaName}</div>
-                )}
                 <div className="flex w-full">
                 <input type="hidden" name="newCategory" value={isNewCategory? 'true' : 'false'} />
                 <input type="hidden" name="categoryIcon" value={categories.find(c => c.id === selectedCategory)?.icon!}/>
@@ -323,9 +208,7 @@ export default function NewIdeaForm(props: {formRef:LegacyRef<HTMLFormElement>})
                     name="description"
                     ></textarea>
                 </div>
-                {errors.quickDescription && (
-                    <div className="text-destructive">{errors.quickDescription}</div>
-                )}
+               
                 <div className="flex w-full">
                     <textarea
                     placeholder="Notes"
@@ -335,5 +218,7 @@ export default function NewIdeaForm(props: {formRef:LegacyRef<HTMLFormElement>})
                 </div>
                 <CreateIdeaButton/>               
             </form>
-    )
+    );
 }
+
+export default NewIdeaFormTemplate;
